@@ -156,7 +156,7 @@ MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Contact
 
-Horacio Lopez M. - email@email_client.com
+Horacio Lopez M. - hola@horacioing.com
 
 Project Link: [https://github.com/lopez19/facturationapp](https://github.com/lopez19/facturationapp)
 
