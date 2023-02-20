@@ -1,6 +1,6 @@
 {
+  "IdFac": 1111,
   "Encabezado": {
-    "IdDoc": 1111,
     "Emisor": {
       "RUTEmisor": "99581150-2",
       "RznSocEmi": "Test"
@@ -27,5 +27,11 @@
       "QtyItem": "5",
       "PrcItem": "65"
     }
-  ]
+  ],
+  "Totales": {
+    "MntNeto": "465",
+    "TasaIVA": "19",
+    "IVA": "88.35",
+    "MntTotal": "553.35"
+  }
 }
