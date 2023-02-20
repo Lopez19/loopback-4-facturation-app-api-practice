@@ -21,6 +21,12 @@ export class Item extends Entity {
   })
   iditem?: number;
 
+  @property({
+    type: 'number',
+    required: true,
+  })
+  cantidad: number;
+
   @belongsTo(() => Producto)
   productoId: number;
 

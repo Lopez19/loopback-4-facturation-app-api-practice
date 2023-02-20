@@ -1,0 +1,31 @@
+{
+  "Encabezado": {
+    "IdDoc": 1111,
+    "Emisor": {
+      "RUTEmisor": "99581150-2",
+      "RznSocEmi": "Test"
+    },
+    "Receptor": {
+      "RUTRecep": "1-9",
+      "RznSocRecep": "Test",
+      "GiroRecep": "Giro",
+      "DirRecep": "Dirección",
+      "CmnaRecep": "Comuna",
+      "CiudadRecep": "Ciudad"
+    }
+  },
+  "Detalle": [
+    {
+      "NmbItem": "Item 1",
+      "DscItem": "Descripción del item 1",
+      "QtyItem": "3",
+      "PrcItem": "100"
+    },
+    {
+      "NmbItem": "Item 2",
+      "DscItem": "Descripción del item 2",
+      "QtyItem": "5",
+      "PrcItem": "65"
+    }
+  ]
+}
