@@ -1,15 +1,15 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import * as FacturaI from '../interfaces/IOFactura';
 import {Estado} from './estado.model';
 
 @model()
 export class Factura extends Entity {
   @property({
-    type: 'number',
+    type: 'string',
     id: true,
     generated: true,
   })
-  idFactura?: number;
+  idFactura?: string;
 
   @property({
     type: 'object',

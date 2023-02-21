@@ -15,16 +15,13 @@ import {
   post,
   requestBody,
 } from '@loopback/rest';
-import {
-  Estado,
-  Factura,
-} from '../models';
+import {Estado, Factura} from '../models';
 import {EstadoRepository} from '../repositories';
 
 export class EstadoFacturaController {
   constructor(
     @repository(EstadoRepository) protected estadoRepository: EstadoRepository,
-  ) { }
+  ) {}
 
   @get('/estados/{id}/facturas', {
     responses: {
@@ -39,7 +36,7 @@ export class EstadoFacturaController {
     },
   })
   async find(
-    @param.path.number('id') id: number,
+    @param.path.number('id') id: string,
     @param.query.object('filter') filter?: Filter<Factura>,
   ): Promise<Factura[]> {
     return this.estadoRepository.facturas(id).find(filter);
@@ -54,18 +51,19 @@ export class EstadoFacturaController {
     },
   })
   async create(
-    @param.path.number('id') id: typeof Estado.prototype.idEstado,
+    @param.path.string('id') id: typeof Estado.prototype.idEstado,
     @requestBody({
       content: {
         'application/json': {
           schema: getModelSchemaRef(Factura, {
             title: 'NewFacturaInEstado',
             exclude: ['idFactura'],
-            optional: ['estadoId']
+            optional: ['estadoId'],
           }),
         },
       },
-    }) factura: Omit<Factura, 'idFactura'>,
+    })
+    factura: Omit<Factura, 'idFactura'>,
   ): Promise<Factura> {
     return this.estadoRepository.facturas(id).create(factura);
   }
@@ -79,7 +77,7 @@ export class EstadoFacturaController {
     },
   })
   async patch(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @requestBody({
       content: {
         'application/json': {
@@ -88,7 +86,8 @@ export class EstadoFacturaController {
       },
     })
     factura: Partial<Factura>,
-    @param.query.object('where', getWhereSchemaFor(Factura)) where?: Where<Factura>,
+    @param.query.object('where', getWhereSchemaFor(Factura))
+    where?: Where<Factura>,
   ): Promise<Count> {
     return this.estadoRepository.facturas(id).patch(factura, where);
   }
@@ -102,8 +101,9 @@ export class EstadoFacturaController {
     },
   })
   async delete(
-    @param.path.number('id') id: number,
-    @param.query.object('where', getWhereSchemaFor(Factura)) where?: Where<Factura>,
+    @param.path.string('id') id: string,
+    @param.query.object('where', getWhereSchemaFor(Factura))
+    where?: Where<Factura>,
   ): Promise<Count> {
     return this.estadoRepository.facturas(id).delete(where);
   }
