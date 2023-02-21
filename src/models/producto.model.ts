@@ -4,8 +4,8 @@ import {Categoria} from './categoria.model';
 @model({
   settings: {
     foreignKeys: {
-      fk_categoria_id: {
-        name: 'fk_categoria_id',
+      fkCategoriaId: {
+        name: 'fkCategoriaId',
         entity: 'Categoria',
         entityKey: 'idcategoria',
         foreignKey: 'categoriaId',

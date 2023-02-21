@@ -1,7 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
-import {Detalle} from '../interfaces/IODetalle';
-import {Encabezado} from '../interfaces/IOEncabezado';
-import {Totales} from '../interfaces/IOTotales';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import * as FacturaI from '../interfaces/IOFactura';
+import {Estado} from './estado.model';
 
 @model()
 export class Factura extends Entity {
@@ -16,20 +15,23 @@ export class Factura extends Entity {
     type: 'object',
     required: true,
   })
-  encabezado: Encabezado;
+  encabezado: FacturaI.Encabezado;
 
   @property({
     type: 'array',
     itemType: 'object',
     required: true,
   })
-  detalle: Detalle[];
+  detalle: FacturaI.Detalle[];
 
   @property({
     type: 'object',
     required: true,
   })
-  totales: Totales;
+  totales: FacturaI.Totales;
+
+  @belongsTo(() => Estado)
+  estadoId: number;
 
   constructor(data?: Partial<Factura>) {
     super(data);
