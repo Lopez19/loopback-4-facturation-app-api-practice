@@ -6,3 +6,4 @@ export * from './estado-factura.controller';
 export * from './producto.controller';
 export * from './factura.controller';
 export * from './estado.controller';
+export * from './item.controller';
