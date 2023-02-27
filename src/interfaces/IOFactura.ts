@@ -25,9 +25,7 @@ export interface Emisor {
 export interface Receptor {
   RUTRecep: string;
   RznSocRecep: string;
-  GiroRecep: string;
   DirRecep: string;
-  CmnaRecep: string;
   CiudadRecep: string;
 }
 
