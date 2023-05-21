@@ -7,3 +7,7 @@ export * from './producto.controller';
 export * from './factura.controller';
 export * from './estado.controller';
 export * from './item.controller';
+export * from './roles.controller';
+export * from './usuario-rol.controller';
+export * from './rol-usuario.controller';
+export * from './usuarios.controller';

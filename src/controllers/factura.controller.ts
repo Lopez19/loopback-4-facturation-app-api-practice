@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -7,23 +8,24 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
 import {Factura} from '../models';
 import {FacturaRepository} from '../repositories';
 
+@authenticate('admin')
 export class FacturaController {
   constructor(
     @repository(FacturaRepository)
-    public facturaRepository : FacturaRepository,
+    public facturaRepository: FacturaRepository,
   ) {}
 
   @post('/facturas')
@@ -52,9 +54,7 @@ export class FacturaController {
     description: 'Factura model count',
     content: {'application/json': {schema: CountSchema}},
   })
-  async count(
-    @param.where(Factura) where?: Where<Factura>,
-  ): Promise<Count> {
+  async count(@param.where(Factura) where?: Where<Factura>): Promise<Count> {
     return this.facturaRepository.count(where);
   }
 
@@ -106,7 +106,8 @@ export class FacturaController {
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(Factura, {exclude: 'where'}) filter?: FilterExcludingWhere<Factura>
+    @param.filter(Factura, {exclude: 'where'})
+    filter?: FilterExcludingWhere<Factura>,
   ): Promise<Factura> {
     return this.facturaRepository.findById(id, filter);
   }
