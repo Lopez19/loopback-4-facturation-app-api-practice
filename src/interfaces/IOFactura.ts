@@ -5,13 +5,6 @@ export interface Factura {
   Totales: Totales;
 }
 
-export interface Detalle {
-  NmbItem: string;
-  DscItem: string;
-  QtyItem: string;
-  PrcItem: string;
-}
-
 export interface Encabezado {
   Emisor: Emisor;
   Receptor: Receptor;
@@ -29,9 +22,15 @@ export interface Receptor {
   CiudadRecep: string;
 }
 
+export interface Detalle {
+  NmbItem: number;
+  DscItem: string;
+  QtyItem: number;
+  PrcItem: number;
+}
 export interface Totales {
-  MntNeto: string;
+  MntNeto: number;
   TasaIVA: string;
-  IVA: string;
-  MntTotal: string;
+  IVA: number;
+  MntTotal: number;
 }

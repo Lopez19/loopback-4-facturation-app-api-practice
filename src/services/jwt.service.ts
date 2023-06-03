@@ -19,9 +19,10 @@ export class JwtService {
           apellido: usuario.apellido,
           email: usuario.email,
           rol: usuario.rolId,
+          DNI: usuario.DNI,
         },
       },
-      pe.JWT_SECRET || 'secret',
+      pe.JWT_SECRET ?? 'secret',
     );
     return token;
   }
@@ -29,7 +30,7 @@ export class JwtService {
   verificarToken(token: string) {
     let decoded: any;
     try {
-      jwt.verify(token, pe.JWT_SECRET || 'secret', (err, decodedToken) => {
+      jwt.verify(token, pe.JWT_SECRET ?? 'secret', (err, decodedToken) => {
         if (err) {
           throw new Error(err.message);
         }

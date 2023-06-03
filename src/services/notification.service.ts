@@ -7,7 +7,7 @@ const pe = process.env;
 
 @injectable({scope: BindingScope.TRANSIENT})
 export class NotificationService {
-  enviarEmail({
+  async enviarEmail({
     email,
     asunto,
     contenido,
@@ -18,8 +18,8 @@ export class NotificationService {
   }) {
     const mailgun = () =>
       mg({
-        apiKey: pe.MAILGUN_API_KEY || '',
-        domain: pe.MAILGUN_DOMAIN || '',
+        apiKey: pe.MAILGUN_API_KEY ?? '',
+        domain: pe.MAILGUN_DOMAIN ?? '',
       });
 
     const data = {
@@ -29,7 +29,7 @@ export class NotificationService {
       html: contenido,
     };
 
-    mailgun()
+    await mailgun()
       .messages()
       .send(data, (error, body) => {
         if (error) {

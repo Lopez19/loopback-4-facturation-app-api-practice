@@ -58,6 +58,7 @@ export class ItemController {
     return this.itemRepository.count(where);
   }
 
+  @authenticate.skip()
   @get('/items')
   @response(200, {
     description: 'Array of Item model instances',

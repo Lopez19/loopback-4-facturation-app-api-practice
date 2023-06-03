@@ -31,7 +31,7 @@ export class Factura extends Entity {
   totales: FacturaI.Totales;
 
   @belongsTo(() => Estado)
-  estadoId: number;
+  estadoId: string;
 
   constructor(data?: Partial<Factura>) {
     super(data);

@@ -1,4 +1,4 @@
-import {ApplicationConfig, ApiApplication} from './application';
+import {ApiApplication, ApplicationConfig} from './application';
 
 export * from './application';
 

@@ -58,6 +58,7 @@ export class FacturaController {
     return this.facturaRepository.count(where);
   }
 
+  @authenticate.skip()
   @get('/facturas')
   @response(200, {
     description: 'Array of Factura model instances',

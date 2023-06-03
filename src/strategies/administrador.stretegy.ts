@@ -26,6 +26,7 @@ export class AdministradorStrategy implements AuthenticationStrategy {
         let perfil: UserProfile = Object.assign({
           rol: info.data.rol,
           idUsuario: info.data.idUsuario,
+          DNI: info.data.DNI,
           username: info.data.username,
           nombre: info.data.nombre,
           apellido: info.data.apellido,

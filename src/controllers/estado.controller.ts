@@ -58,6 +58,7 @@ export class EstadoController {
     return this.estadoRepository.count(where);
   }
 
+  @authenticate.skip()
   @get('/estados')
   @response(200, {
     description: 'Array of Estado model instances',

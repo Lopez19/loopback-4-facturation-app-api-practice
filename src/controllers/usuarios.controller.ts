@@ -22,6 +22,7 @@ import {
 } from '@loopback/rest';
 import {Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
+import {RolRepository} from '../repositories/rol.repository';
 import {GeneralFunctionsService, NotificationService} from '../services';
 import {JwtService} from '../services/jwt.service';
 import {Credenciales} from './../models/credenciales.model';
@@ -31,6 +32,8 @@ export class UsuariosController {
   constructor(
     @repository(UsuarioRepository)
     public usuarioRepository: UsuarioRepository,
+    @repository(RolRepository)
+    public rolRepository: RolRepository,
 
     @service(GeneralFunctionsService)
     public generalFn: GeneralFunctionsService,
@@ -130,7 +133,16 @@ export class UsuariosController {
   async find(
     @param.filter(Usuario) filter?: Filter<Usuario>,
   ): Promise<Usuario[]> {
-    return this.usuarioRepository.find(filter);
+    // Omite la Contraseña
+    const filter2 = {
+      ...filter,
+      fields: {
+        ...filter?.fields,
+        password: false,
+      },
+    };
+
+    return this.usuarioRepository.find(filter2);
   }
 
   @patch('/usuarios')
@@ -166,6 +178,15 @@ export class UsuariosController {
     @param.filter(Usuario, {exclude: 'where'})
     filter?: FilterExcludingWhere<Usuario>,
   ): Promise<Usuario> {
+    // Omitir la contraseña
+    filter = {
+      ...filter,
+      fields: {
+        ...filter?.fields,
+        password: false,
+      },
+    };
+
     return this.usuarioRepository.findById(id, filter);
   }
 
@@ -195,7 +216,23 @@ export class UsuariosController {
     @param.path.string('id') id: string,
     @requestBody() usuario: Usuario,
   ): Promise<void> {
+    // Si la contraseña no se ha modificado, omitimos la encriptación
+    if (usuario.password === '') {
+      const usuarioExistente = await this.usuarioRepository.findById(id);
+      usuario.password = usuarioExistente.password;
+    } else {
+      // Encriptamos la contraseña
+      usuario.password = await this.generalFn.encriptarContraseña(
+        usuario.password,
+      );
+    }
+
     await this.usuarioRepository.replaceById(id, usuario);
+
+    // Obtenemos el usuario actualizado
+    // const usuarioActualizado = await this.usuarioRepository.findById(id);
+    // const rolUser = await this.rolRepository.findById(usuarioActualizado.rolId);
+    // usuarioActualizado.rolId = rolUser.nombre;
   }
 
   @del('/usuarios/{id}')
@@ -206,6 +243,7 @@ export class UsuariosController {
     await this.usuarioRepository.deleteById(id);
   }
 
+  @authenticate.skip()
   @post('/login', {
     responses: {
       '200': {
@@ -223,16 +261,39 @@ export class UsuariosController {
     })
     credenciales: Credenciales,
   ): Promise<object> {
-    let usuario = await this.usuarioRepository.findOne({
-      where: {username: credenciales.username, password: credenciales.password},
+    // Comparar las credenciales con la base de datos (username y password)
+    const usuario = await this.usuarioRepository.findOne({
+      where: {
+        username: credenciales.username,
+      },
     });
 
     if (usuario) {
+      // Verificamos la contraseña
+      const contraseñaValida = await this.generalFn.compararContraseña(
+        credenciales.password,
+        usuario.password,
+      );
+
+      if (!contraseñaValida) {
+        // Retornamos un mensaje de error 401 (Unauthorized)
+        throw new HttpErrors[401](
+          'Las credenciales no son correctas -> Contraseña incorrecta',
+        );
+      }
+
       // Generamos el token
       const token = this.jwtService.crearToken(usuario);
 
       // Omitimos la contraseña
       usuario.password = '';
+
+      if (usuario.rolId) {
+        const rol = await this.rolRepository.findById(usuario.rolId);
+        usuario.rolId = rol.nombre;
+      } else {
+        usuario.rolId = 'Sin rol';
+      }
 
       // Retornamos el token
       return {
@@ -240,8 +301,10 @@ export class UsuariosController {
         token: token,
       };
     } else {
-      // Retornamos un mensaje de error 401 (Unauthorized)
-      throw new HttpErrors[401]('Las credenciales no son correctas');
+      // Usuario no encontrado
+      throw new HttpErrors[401](
+        'Las credenciales no son correctas -> Usuario no encontrado',
+      );
     }
   }
 }
